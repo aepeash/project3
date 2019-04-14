@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Cookie (edit)</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+          integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
+          crossorigin="anonymous">
+    <!-- Project CSS -->
+    <link rel="stylesheet" href="../Library/project-styles.css">
+</head>
+<body>
+<div id="navbar"></div>
+<main role="main" class="container">
+    <h1>Cookie (edit)</h1>
+    <p>Use this form to <span id="form-purpose"></span>. Click Cancel to forghedaboudit.</p>
+    <div class="form-group">
+        <label for="cookie-name">Name</label>
+        <input type="text" class="form-control" id="cookie-name"
+               aria-describedby="cookie-name-help" placeholder="Enter a name">
+        <small id="cookie-name-help" class="form-text text-muted">E.g., Fred.</small>
+    </div>
+    <div class="form-group">
+        <label for="cookie-amount">Enter the amount of cookies</label>
+        <input type="number" min="1" class="form-control" id="cookie-amount"
+               aria-describedby="cookie-amount-help" placeholder="Enter the amount">
+        <small id="cookie-amount-help" class="form-text text-muted"></small>
+    </div>
+    <div class="form-group">
+        <label for="cookie-rating">Rating</label>
+        <input type="number" min="1" class="form-control" id="cookie-rating"
+               aria-describedby="cookie-rating-help" placeholder="Enter a cookie rating 1-10">
+        <small id="cookie-rating-help" class="form-text text-muted">E.g., 28.1.</small>
+    </div>
+    <p>
+        <button onclick="Cookie.save()"
+                class="btn btn-primary" title="Save cookie data">Save</button>
+        &nbsp;&nbsp;
+        <button onclick="Cookie.forghedaboudit()"
+                class="btn btn-danger" title="Forghedaboudit">Cancel</button>
+    </p>
+</main><!-- /.container -->
+<div id="footer"></div>
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"
+        integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
+        integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/taffydb/2.7.3/taffy-min.js"></script>
+<script>
+    "use strict";
+    var Cookie = Cookie || {};
+    (function($) {
+    Cookie.save = function() {
+        //Validate.
+        var cookieName = $("#cookie-name").val().trim();
+        if ( cookieName == "" ) {
+            alert("Sorry, you didn't give a cookie name.");
+            return;
+        }
+        var cookieAmount = $("#cookie-amount").val();
+        if ( cookieAmount == "" ) {
+            alert("You must give an amount of cookies.");
+            return;
+        }
+        var cookieRating = $("#cookie-rating").val();
+        if ( cookieRating == "" ) {
+            alert("You must give a rating of this cookie.");
+            return;
+        }
+        var cookieRating = $("#cookie-rating").val();
+        if ( cookieRating > 10 ) {
+            alert("Sorry the rating of your cookie must be between 1-10.");
+            return;
+        }
+        //Data OK.
+        //Is this an add, or an edit?
+        if ( localStorage.getItem('operation') == 'new' ) {
+            //Add a new record.
+            //Find the highest id so far.
+            var highestId = Cookie.cookieDB().max("id");
+            //New cookie's id is one more.
+            var newCookieId = highestId + 1;
+            //Create a new object.
+            var newCookie = {
+                id: newCookieId,
+                name: newCookieName,
+                amount: newCookieAmount,
+                rating: newCookieRating
+            };
+            //Add the new cookie.
+            Cookie.cookieDB.insert(newCookie);
+        }
+        else {
+            //It's an edit.
+            //Make an updated object.
+            var cookieId = parseInt(localStorage.getItem('cookieIdToEdit'));
+            var updatedCookie = {
+                id: cookieId,
+                name: cookieName,
+                amount: cookieAmount,
+                rating: cookieRating
+            };
+            //Update the DB.
+            Cookie.cookieDB({id: cookieId}).update(updatedCookie);
+        }
+        //Go to admin page.
+        window.location.href = "index.html";
+    };
+    /**
+     * Forghedaboudit.
+     */
+    Cookie.forghedaboudit = function(){
+        if ( confirm("Are you sure?") ) {
+            window.location.href = "index.html";
+        }
+    };
+        $(document).ready(function () {
+            //Load the navbar from the library.
+            $("#navbar").load("../Library/includes/navbar.html");
+            //Load the footer from the library.
+            $("#footer").load("../Library/includes/footer.html");
+            //Create an empty Taffy DB.
+            Cookie.cookieDB = TAFFY();
+            //Link the DB to localStorage. Existing fleet will be loaded.
+            Cookie.cookieDB.store("cookie");
+            //If this is an edit, load the existing cookie's data into the form fields.
+            if ( localStorage.getItem('operation') === 'edit' ) {
+                //Show the user that this is an edit form.
+                $("#form-purpose").html('edit a cookie record');
+                //Get id of cookie to edit.
+                //Has to be an integer for lookup to work.
+                var cookieId = parseInt(localStorage.getItem('cookieIdToEdit'));
+                //Get that cookie's data.
+                var cookieArray = Cookie.cookieDB({id: cookieId}).get();
+                var cookie = cookieArray[0];
+                //Copy cookie data to the form fields.
+                $("#cookie-name").val(cookie.name);
+                $("#cookie-amount").val(cookie.amount);
+                $("#cookie-rating").val(cookie.rating);
+            }
+            else {
+                //Show the user that this is an add form.
+                $("#form-purpose").html('add a new a cookie record');
+            }
+        });
+    }(jQuery));
+</script>
+</body>
+</html>

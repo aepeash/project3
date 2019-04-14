@@ -19,7 +19,8 @@
       <p>Authorized users only.</p>
       <div id="cookie-container" class="hide-on-load"></div>
       <p>
-        <a href="add.html" class="btn btn-primary" title="Add a new cookie">Add</a>
+        <button class="btn btn-primary" onclick="Cookie.newCookie()"
+                title="Add a new type of cookie">Add</button>
       </p>
       <p>
         <a href="initialize.html" title="Reset to starting DB">Initialize</a>
@@ -51,6 +52,10 @@
             $("#footer").load("../Library/includes/footer.html");
             Cookie.cookieDB = TAFFY();
             Cookie.cookieDB.store("cookie");
+          Cookie.newCookie = function() {
+            localStorage.setItem('operation', 'new');
+            window.location.href = 'new-edit-item.html';
+          };
           Cookie.editCookie = function(cookieId) {
             localStorage.setItem('operation', 'edit');
             localStorage.setItem('cookieIdToEdit', cookieId);
