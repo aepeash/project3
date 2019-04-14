@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Cookies</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <!-- Project CSS -->
+    <link href="../Library/project-styles.css" rel="stylesheet">
+  </head>
+  <body>
+    <div id="navbar"></div>
+    <main role="main" class="container">
+      <h1>Initialize</h1>
+      <p>Click the Initialize button to initialize the cookie database</p>
+      <p> <i>Warning:</i> all changes will be lost</p>
+      <p>
+        <button id="initialize" class="btn btn-primary"
+                 onclick="Cookie.initiDb()">Initialize</button>
+      </p>
+      <p>
+        <a href="../index.html" title="Show the cookies">List</a>
+      </p>
+    </main><!-- /.container -->
+    <div id="footer"></div>
+    <!-- jQuery first, then Popper, then Bootstrap. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.js" integrity="sha256-awnyktR66d3+Hym/H0vYBQ1GkO06rFGkzKQcBj7npVE=" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/taffydb/2.7.3/taffy-min.js"></script>
+    <script>
+    "use strict";
+    var Cookie = Cookie || {};
+    (function($) {
+          Cookie.initiDb = function () {
+            //init data set
+            var startingCookies = [
+              {
+                id: "1",
+                name: "Butter Cookies",
+                amount: "10",
+                rating: "6"
+              },
+            {
+              id:"2",
+              name: "Chocolate Chip Cookies",
+              amount: "20",
+              rating: "10"
+            },
+            {
+              id: "3",
+              name: "Almond Biscuit",
+              amount: "14",
+              rating: "7"
+            },
+            {
+              id: "4",
+              name: "Sugar Cookies",
+              amount: "12",
+              rating: "4"
+            }
+            ];
+            //empty DB
+            Cookie.cookieDB = TAFFY();
+            //link DB to local storage
+            Cookie.cookieDB.store("cookie");
+            //remove records
+            Cookie.cookieDB().remove();
+            //insert new records in the DB
+            Cookie.cookieDB.insert(startingCookies);
+            alert("Done");
+          };
+          $(document).ready(function () {
+            //Load the navbar from the library.
+            $("#navbar").load("../Library/includes/navbar.html");
+            //Load the footer from the library.
+            $("#footer").load("../Library/includes/footer.html");
+          });
+    }(jQuery));
+    </script>
+  </body>
+</html>

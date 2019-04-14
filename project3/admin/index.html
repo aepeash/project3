@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Ships</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <!-- Project CSS -->
+    <link href="../Library/project-styles.css" rel="stylesheet">
+  </head>
+  <body>
+    <div id="navbar"></div>
+    <main role="main" class="container">
+
+
+      <h1>Cookies administration</h1>
+      <p>Authorized users only.</p>
+      <div id="cookie-container" class="hide-on-load"></div>
+      <p>
+        <a href="add.html" class="btn btn-primary" title="Add a new cookie">Add</a>
+      </p>
+      <p>
+        <a href="initialize.html" title="Reset to starting DB">Initialize</a>
+      </p>
+
+
+    </main><!-- /.container -->
+    <div id="footer"></div>
+    <!-- jQuery first, then Popper, then Bootstrap. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.js" integrity="sha256-awnyktR66d3+Hym/H0vYBQ1GkO06rFGkzKQcBj7npVE=" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/taffydb/2.7.3/taffy-min.js"></script>
+    <script>
+    "use strict";
+    var Cookie = Cookie || {};
+    (function($) {
+      Cookie.deleteItem = function(itemId){
+        var confirmation = confirm('Are you sure?');
+        if (confirmation) {
+          Cookie.cookieDB({id:itemId}).remove();
+          window.location.href = 'index.html';
+        }
+      };
+        $(document).ready(function () {
+            //Load the navbar from the library.
+            $("#navbar").load("../Library/includes/navbar.html");
+            //Load the footer from the library.
+            $("#footer").load("../Library/includes/footer.html");
+            Cookie.cookieDB = TAFFY ();
+            Cookie.cookieDB.store("cookie");
+            var cookieHtml =
+                  "<table class='table'>" +
+                  "   <thead>" +
+                  "       <th>Name</th>" +
+                  "       <th class='text-center'>Amount</th>" +
+                  "       <th>Rating</th>" +
+                    "       <th>Operations</th>" +
+                  "   </thead>" +
+                  "   <tbody>";
+          Cookie.cookieDB().order("name").each(function (cookie) {
+            var deleteButton = "<button class='btn btn-danger' "
+            + "onclick='Cookie.deleteItem(" + cookie.id +")'"
+            + " title='Permanently remove this cookie' "
+            + " >Delete</button>";
+            var cookieRow =
+                    "<tr>" +
+                    "  <td>" + cookie.name + "</td>" +
+                    "  <td class='text-center'>" + cookie.genre + "</td>" +
+                    "  <td>" + cookie.rating + "</td>" +
+                    "  <td>" + deleteButton + "</td>" +
+                    "</tr>";
+            cookieHtml += cookieRow;
+          });
+          cookieHtml += "</tbody></table>";
+          //show
+          $("#cookie-container")
+                  .html(cookieHtml)
+                  .show('slow');
+        });
+    }(jQuery));
+    </script>
+  </body>
+</html>

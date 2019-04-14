@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+    <head>
+    <title>Cookie</title>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- Bootstrap core CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+        <!-- Project CSS -->
+        <link href="../Library/project-styles.css" rel="stylesheet">
+    </head>
+    <body>
+    <div id="navbar"></div>
+    <main role="main" class="container">
+        <h1>Cookies</h1>
+        <p>Add a Cookie type, or click Cancel to forgetaboutit</p>
+        <div class="form-group">
+            <label for="cookie-name">Name</label>
+            <input type="text" class="form-control" id="cookie-name"
+                   aria-describedby="cookie-name-help" placeholder="Enter a name">
+            <small id="cookie-name-help" class="form-text text-muted">E.g., Macaroons</small>
+        </div>
+
+        <div class="form-group">
+            <label for="cookie-amount">Amount</label>
+            <input type="number" class="form-control" id="cookie-amount"
+                   aria-describedby="cookie-amount-help" placeholder="Enter a amount.">
+            <small id="cookie-amount-help" class="form-text text-muted">Enter the amount of cookies</small>
+        </div>
+        <div class="form-group">
+            <label for="cookie-rating">Rating</label>
+            <input type="number" class="form-control" id="cookie-rating"
+                   aria-describedby="cookie-rating-help" placeholder="Enter a rating from 1 to 10.">
+            <small id="cookie-rating-help" class="form-text text-muted">E.g., 5</small>
+        </div>
+        <p>
+            <button onclick="Cookie.add()"
+                    class="btn btn-primary" title="Add new cookie">Save</button>
+            &nbsp;&nbsp;
+            <button onclick="Cookie.forghedaboudit()"
+                    class="btn btn-danger" title="Forghedaboudit">Cancel</button>
+        </p>
+</main><!-- /.container -->
+<div id="footer"></div>
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"
+        integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
+        integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/taffydb/2.7.3/taffy-min.js"></script>
+<script>
+    "use strict";
+    var Cookie = Cookie || {};
+    Cookie.add = function () {
+        var newCookieName = $("#cookie-name").val().trim();
+        if (newCookieName === "") {
+            alert("Sorry you did not give a cookie name.");
+            return;
+        }
+        var newCookieAmount = $("#cookie-amount").val();
+        if (newCookieAmount < 1) {
+            alert("Sorry you cannot enter a negative amount of cookies.");
+            return;
+        }
+        var newCookieRating = $("#cookie-rating").val();
+        if (newCookieRating < 1) {
+            alert("Sorry you must enter a number 1-10.");
+            return;
+        }
+        //Data ok
+        //Add a new record.
+        var highestId = Cookie.cookieDB().max("id");
+        //give id
+        var newCookieId = highestId + 1;
+        //create new object
+        var newCookie = {
+            id: newCookieId,
+            name: newCookieName,
+            genre: newCookieAmount,
+            rating: newCookieRating
+        };
+        //add new line item
+        Cookie.cookieDB.insert(newCookie);
+
+        //go to list page
+        window.location.href = "../index.html";
+    };
+
+    //Forghedaboudit.
+    Cookie.forghedaboudit = function() {
+        if ( confirm("Are you sure?")) {
+            window.location.href = "index.html";
+        }
+    };
+    (function($) {
+        $(document).ready(function () {
+            //Load the navbar from the library.
+            $("#navbar").load("../Library/includes/navbar.html");
+            //Load the footer from the library.
+            $("#footer").load("../Library/includes/footer.html");
+            Cookie.cookieDB = TAFFY ();
+            Cookie.cookieDB.store("cookie");
+        });
+    }(jQuery));
+</script>
+</body>
+</html>
