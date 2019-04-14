@@ -101,12 +101,17 @@
     };
     (function($) {
         $(document).ready(function () {
+            if ( localStorage.getItem('jarLoggedIn') != "yes") {
+                window.location.href = "login.html";
+                alert("You must be logged in as an admin to access this page!");
+            }
             //Load the navbar from the library.
             $("#navbar").load("../Library/includes/navbar.html");
             //Load the footer from the library.
             $("#footer").load("../Library/includes/footer.html");
             Cookie.cookieDB = TAFFY ();
             Cookie.cookieDB.store("cookie");
+
         });
     }(jQuery));
 </script>
