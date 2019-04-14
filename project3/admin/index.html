@@ -40,7 +40,7 @@
       Cookie.deleteItem = function(itemId){
         var confirmation = confirm('Are you sure?');
         if (confirmation) {
-          Cookie.cookieDB({id:itemId}).remove();
+          Cookie.cookieDB({id: itemId}).remove();
           window.location.href = 'index.html';
         }
       };
@@ -49,7 +49,7 @@
             $("#navbar").load("../Library/includes/navbar.html");
             //Load the footer from the library.
             $("#footer").load("../Library/includes/footer.html");
-            Cookie.cookieDB = TAFFY ();
+            Cookie.cookieDB = TAFFY();
             Cookie.cookieDB.store("cookie");
             var cookieHtml =
                   "<table class='table'>" +
@@ -67,8 +67,9 @@
             + " >Delete</button>";
             var cookieRow =
                     "<tr>" +
+                    "  <td>" + cookie.id + "</td>" +
                     "  <td>" + cookie.name + "</td>" +
-                    "  <td class='text-center'>" + cookie.genre + "</td>" +
+                    "  <td class='text-center'>" + cookie.amount + "</td>" +
                     "  <td>" + cookie.rating + "</td>" +
                     "  <td>" + deleteButton + "</td>" +
                     "</tr>";
