@@ -51,6 +51,11 @@
             $("#footer").load("../Library/includes/footer.html");
             Cookie.cookieDB = TAFFY();
             Cookie.cookieDB.store("cookie");
+          Cookie.editCookie = function(cookieId) {
+            localStorage.setItem('operation', 'edit');
+            localStorage.setItem('cookieIdToEdit', cookieId);
+            window.location.href = 'new-edit-item.html';
+          };
             var cookieHtml =
                   "<table class='table'>" +
                   "   <thead>" +
@@ -62,16 +67,19 @@
                   "   <tbody>";
           Cookie.cookieDB().order("name").each(function (cookie) {
             var deleteButton = "<button class='btn btn-danger' "
-            + "onclick='Cookie.deleteItem(" + cookie.id +")'"
-            + " title='Permanently remove this cookie' "
-            + " >Delete</button>";
+                    + "onclick='Cookie.deleteItem(" + cookie.id + ")'"
+                    + " title='Permanently remove this cookie' "
+                    + " >Delete</button>";
+            var editButton = "<button class='btn btn-primary' "
+                    +    "onclick='Cookie.editCookie(" + cookie.id + ") ' "
+                    +    "title='Change change cookie information' "
+                    + ">Edit</button>";
             var cookieRow =
                     "<tr>" +
-                    "  <td>" + cookie.id + "</td>" +
                     "  <td>" + cookie.name + "</td>" +
                     "  <td class='text-center'>" + cookie.amount + "</td>" +
                     "  <td>" + cookie.rating + "</td>" +
-                    "  <td>" + deleteButton + "</td>" +
+                    "  <td>" + editButton + "&nbsp;&nbsp;"+ deleteButton + "</td>" +
                     "</tr>";
             cookieHtml += cookieRow;
           });
