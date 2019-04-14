@@ -40,7 +40,7 @@
       Cookie.deleteItem = function(itemId){
         var confirmation = confirm('Are you sure?');
         if (confirmation) {
-          Cookie.cookieDB({id:itemId}).remove();
+          Cookie.cookieDB({id: itemId}).remove();
           window.location.href = 'index.html';
         }
       };
