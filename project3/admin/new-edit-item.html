@@ -90,6 +90,9 @@
             var highestId = Cookie.cookieDB().max("id");
             //New cookie's id is one more.
             var newCookieId = highestId + 1;
+            var newCookieName = cookieName;
+            var newCookieAmount = cookieAmount;
+            var newCookieRating = cookieRating;
             //Create a new object.
             var newCookie = {
                 id: newCookieId,
@@ -125,6 +128,10 @@
         }
     };
         $(document).ready(function () {
+            if ( localStorage.getItem('jarLoggedIn') != "yes") {
+                window.location.href = "login.html";
+                alert("You must be logged in as an admin to access this page!");
+            }
             //Load the navbar from the library.
             $("#navbar").load("../Library/includes/navbar.html");
             //Load the footer from the library.

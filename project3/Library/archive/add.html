@@ -8,7 +8,7 @@
         <!-- Bootstrap core CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
         <!-- Project CSS -->
-        <link href="../Library/project-styles.css" rel="stylesheet">
+        <link href="../project-styles.css" rel="stylesheet">
     </head>
     <body>
     <div id="navbar"></div>
@@ -90,7 +90,7 @@
         Cookie.cookieDB.insert(newCookie);
 
         //go to list page
-        window.location.href = "../index.html";
+        window.location.href = "../../index.html";
     };
 
     //Forghedaboudit.
@@ -101,10 +101,6 @@
     };
     (function($) {
         $(document).ready(function () {
-            if ( localStorage.getItem('jarLoggedIn') != "yes") {
-                window.location.href = "login.html";
-                alert("You must be logged in as an admin to access this page!");
-            }
             //Load the navbar from the library.
             $("#navbar").load("../Library/includes/navbar.html");
             //Load the footer from the library.
