@@ -61,6 +61,7 @@
     var Cookie = Cookie || {};
     (function($) {
     Cookie.save = function() {
+        var cookieLog = "";
         //Validate.
         var cookieName = $("#cookie-name").val().trim();
         if ( cookieName == "" ) {
@@ -102,6 +103,14 @@
             };
             //Add the new cookie.
             Cookie.cookieDB.insert(newCookie);
+            cookieLog = localStorage.getItem('cookieLog');
+            cookieLog +=
+                "<p>Cookie ID #: " + newCookieId +
+                "<br>Cookie Name: "+ newCookieName +
+                "<br>Amount: " + newCookieAmount +
+                "<br>Rating: " + newCookieRating +
+                "</p><hr>";
+            localStorage.setItem('cookieLog', cookieLog);
         }
         else {
             //It's an edit.
@@ -115,8 +124,17 @@
             };
             //Update the DB.
             Cookie.cookieDB({id: cookieId}).update(updatedCookie);
+            cookieLog = localStorage.getItem('cookieLog');
+            cookieLog +=
+                "<p>Cookie ID #: " + cookieId +
+                "<br>Cookie Name: " + cookieName +
+                "<br>Amount: " + cookieAmount +
+                "<br>Rating: " + cookieRating +
+                "</p><hr>";
+            localStorage.setItem('cookieLog', cookieLog);
         }
         //Go to admin page.
+
         window.location.href = "index.html";
     };
     /**
